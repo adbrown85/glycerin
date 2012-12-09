@@ -1,0 +1,9 @@
+To create an OpenGL context for running unit tests, Glycerin uses GLFW,
+developed by Marcus Geelnard and Camilla Beglund.  It is licensed under an
+unmodified zlib/libpng license, and it may be obtained from
+http://www.glfw.org.
+
+For unit testing, Glycerin uses CppUnit, developed by Michael Feathers, Jerome
+Lacoste, E. Sommerlade, Baptiste Lepilleur, Bastiaan Bakker, Steve Robbins,
+and Harvey Brydon.  It is licensed under the LGPL v2.1, and it may be obtained
+from http://sourceforge.net/projects/cppunit.
