@@ -1,1 +1,7 @@
 Glycerin - Fuel for OpenGL applications
+
+Glycerin is a set of utilities for making it easier to get OpenGL applications
+up and running.  To install Glycerin, see the INSTALL document.  For a rundown
+on the changes between versions, see the NEWS document.  Lastly, if you want
+to experiment with the code or contribute new features or fixes, please see
+the HACKING document.
