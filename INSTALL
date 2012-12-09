@@ -1,0 +1,42 @@
+To install Glycerin from a distribution, first make sure you have the necessary
+tools and dependencies installed.  You will need g++, GNU Make, and GLFW.
+Windows users will need to install a Bourne-compatible shell, like the one
+provided with MinGW.
+
+Then extract the archive and execute the following three commands:
+
+    ./configure
+    make
+    make install
+
+Unix-based operating systems such as Linux and Mac OS X may need to provide
+administrator privileges to install Glycerin in the default directory.  On Mac
+OS X and Ubuntu, precede the install command with 'sudo' as shown below.
+
+    sudo make install
+
+The installation directory that Glycerin is installed into can be modified by
+specifying the 'prefix' option to the configure script.
+
+    ./configure --prefix=$HOME
+
+To make sure Glycerin is working as expected, execute the command below.  If it
+completes without error, Glycerin should be ready to go.
+
+    make check
+
+Once Glycerin is installed, it may easily be included in a project by using
+pkg-config.  It will report the flags needed to compile and link Glycerin with
+your project.  Use backticks to pass its output to your compiler.  The example
+below builds a program that has Glycerin as a dependency.
+
+    g++ `pkg-config --cflags --libs glycerin-0` MyApp.cxx -o MyApp
+
+To generate documentation, make sure Doxygen is installed and then run the
+command below.
+
+    make html
+
+Finally, Glycerin can be uninstalled by running the command below.
+
+    make uninstall
