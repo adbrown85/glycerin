@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+export LIBTOOLIZE_OPTIONS='--quiet'
+automake --add-missing --copy > /dev/null 2>&1
+autoreconf --install

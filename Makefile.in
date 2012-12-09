@@ -1,0 +1,216 @@
+# @configure_input@
+
+# Package
+package      := @PACKAGE_NAME@
+version      := @PACKAGE_VERSION@
+major        := @PACKAGE_MAJOR_VERSION@
+minor        := @PACKAGE_MINOR_VERSION@
+incremental  := @PACKAGE_INCREMENTAL_VERSION@
+tarname      := @PACKAGE_TARNAME@
+
+# Directories
+prefix       := @prefix@
+exec_prefix  := @exec_prefix@
+bindir       := @bindir@
+libdir       := @libdir@
+includedir   := @includedir@
+srcdir       := @srcdir@
+builddir     := build
+docdir       := doc
+distdir      := dist
+tardir       := $(tarname)-$(version)
+VPATH        := $(srcdir) $(srcdir)/$(tarname) $(builddir)
+pkgcfgdir    := $(libdir)/pkgconfig
+
+# Tools
+CXX          := @CXX@
+INSTALL      := @INSTALL@
+MKDIR        := mkdir -p
+CP           := cp
+TAR          := tar
+LIBTOOL      := $(srcdir)/libtool
+
+# Compiler options
+CPPFLAGS     := @CPPFLAGS@
+CXXFLAGS     := @CXXFLAGS@
+INCLUDES     := -I$(srcdir)
+DEFS         := @DEFS@
+DEPS_CFLAGS  := @DEPS_CFLAGS@
+CXXOPTS      := $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $(DEFS) $(DEPS_CFLAGS)
+
+# Linker options
+LIBS         := @LIBS@
+LDFLAGS      := @LDFLAGS@
+DEPS_LIBS    := @DEPS_LIBS@
+LDOPTS       := $(LDFLAGS) $(LIBS) $(DEPS_LIBS)
+
+# Files
+all_sources  := $(wildcard $(srcdir)/$(tarname)/*.cxx)
+main_sources := $(filter-out %Test.cxx,$(all_sources))
+test_sources := $(filter %Test.cxx,$(all_sources))
+headers      := $(subst .cxx,.hxx,$(main_sources))
+objects      := $(notdir $(subst .cxx,.lo,$(main_sources)))
+tests        := $(notdir $(subst .cxx,,$(test_sources)))
+depends      := $(subst .lo,.d,$(objects)) $(addsuffix .d,$(tests))
+library      := lib$(tarname)-$(major).la
+pkgcfgfile   := $(tarname)-$(major).pc
+tarfile      := $(tarname)-$(version).tar.gz
+
+# Interface
+.PHONY: all clean distclean maintainer-clean
+.DEFAULT: all
+all: objects tests library
+clean:
+	$(RM) -r $(builddir)
+	$(RM) -r $(docdir)
+	$(RM) -r $(distdir)
+distclean: clean
+	$(RM) config.h
+	$(RM) config.log
+	$(RM) config.status
+	$(RM) libtool
+	$(RM) Makefile
+	$(RM) $(pkgcfgfile)
+maintainer-clean: distclean
+	$(RM) aclocal.m4
+	$(RM) -r autom4te.cache
+	$(RM) autoscan.log
+	$(RM) configure.scan
+	$(RM) config.guess
+	$(RM) config.h.in
+	$(RM) config.h.in~
+	$(RM) config.sub
+	$(RM) configure
+	$(RM) install-sh
+	$(RM) ltmain.sh
+	$(RM) -r m4
+
+# Objects
+.PHONY: objects
+objects: $(objects)
+%.lo: %.cxx %.hxx
+	@echo "  CXX   $@"
+	@$(LIBTOOL) --mode=compile --quiet \
+            $(CXX) \
+            -o $(builddir)/$@ \
+            $(CXXOPTS) \
+            -c \
+            $<
+
+# Tests
+.PHONY: check tests
+tests: $(tests)
+%Test: %Test.cxx
+	@echo "  CXX   $@"
+	@$(LIBTOOL) --mode=link --quiet \
+            $(CXX) \
+            -o $(builddir)/$@ \
+            $(CXXOPTS) $(LDOPTS) \
+            $< \
+            $(addprefix $(builddir)/,$(notdir $(filter %.lo,$^)))
+check: tests
+	@for i in $(tests); do $(builddir)/$$i; done
+
+# Library
+.PHONY: library
+library: $(library)
+$(library): $(objects)
+	@echo "  LD    $@"
+	@$(LIBTOOL) --mode=link --quiet \
+            $(CXX) \
+            -o $(builddir)/$@ \
+            $(LDOPTS) \
+            -rpath $(libdir) \
+            -version-info $(minor):$(incremental):0 \
+            $(addprefix $(builddir)/,$(objects))
+
+# Installation
+.PHONY: install uninstall
+install: all
+	@echo "  INSTALL $(libdir)/$(library)"
+	@$(INSTALL) -d $(libdir)
+	@$(LIBTOOL) --mode=install --quiet $(INSTALL) $(builddir)/$(library) $(libdir)
+	@$(LIBTOOL) --mode=finish -n --quiet $(libdir)
+	@echo "  INSTALL $(includedir)/$(tarname)-$(major)"
+	@$(INSTALL) -d $(includedir)/$(tarname)-$(major)/$(tarname)
+	@$(INSTALL) -m 0644 $(headers) $(includedir)/$(tarname)-$(major)/$(tarname)
+	@$(INSTALL) -m 0644 $(tarname)/common.h $(includedir)/$(tarname)-$(major)/$(tarname)
+	@echo "  INSTALL $(pkgcfgdir)/$(pkgcfgfile)"
+	@$(INSTALL) -d $(pkgcfgdir)
+	@$(INSTALL) -m 0644 $(pkgcfgfile) $(pkgcfgdir)
+uninstall:
+	@echo "  UNINSTALL $(libdir)/$(library)"
+	@$(LIBTOOL) --mode=uninstall --quiet $(RM) $(libdir)/$(library)
+	@echo "  UNINSTALL $(includedir)/$(tarname)-$(major)"
+	@$(RM) -r $(includedir)/$(tarname)-$(major)
+	@echo "  UNINSTALL $(pkgcfgdir)/$(pkgcfgfile)"
+	@$(RM) $(pkgcfgdir)/$(pkgcfgfile)
+
+# Dependencies
+.PHONY: depends
+depends: $(depends)
+$(builddir)/%.d: %.hxx
+	@echo "  GEN   $@"
+	@$(INSTALL) -d $(builddir)
+	@$(CXX) \
+            $(CXXOPTS) \
+            -MM \
+            -MP \
+            $(subst .hxx,.cxx,$<) \
+            | sed 's|[[:alnum:]/]*/||g' \
+            | sed 's|\([[:alnum:]]*\)\.o|\1.lo build/\1.d|' \
+            > $@
+$(builddir)/%Test.d: %Test.cxx
+	@echo "  GEN   $@"
+	@$(INSTALL) -d $(builddir)
+	@$(CXX) \
+            $(CXXOPTS) \
+            -MM \
+            -MP \
+            $< \
+            | sed 's|[[:alnum:]/]*/||g' \
+            | sed 's|\([[:alnum:]]*\)\.o|\1 build/\1.d|' \
+            | sed 's|\.hxx|\.lo|g' \
+            > $@
+ifeq (clean,$(findstring clean,$(MAKECMDGOALS)))
+  # empty
+else ifeq (html,$(findstring html,$(MAKECMDGOALS)))
+  # empty
+else
+  -include $(addprefix $(builddir)/,$(depends))
+endif
+
+# Documentation
+.PHONY: html
+html:
+	@$(MKDIR) $(docdir)
+	@doxygen
+
+# Distribution
+.PHONY: dist
+dist: all
+	@echo "  TAR   $(tarfile)"
+	@$(MKDIR) $(tardir)
+	@$(MKDIR) $(tardir)/$(tarname)
+	@$(CP) $(tarname)/common.h $(tardir)/$(tarname)
+	@$(CP) $(main_sources) $(tardir)/$(tarname)
+	@$(CP) $(headers) $(tardir)/$(tarname)
+	@$(CP) $(test_sources) $(tardir)/$(tarname)
+	@$(CP) README $(tardir)
+	@$(CP) INSTALL $(tardir)
+	@$(CP) HACKING $(tardir)
+	@$(CP) LICENSE $(tardir)
+	@$(CP) NEWS $(tardir)
+	@$(CP) NOTICE $(tardir)
+	@$(CP) Makefile.in $(tardir)
+	@$(CP) configure $(tardir)
+	@$(CP) config.guess $(tardir)
+	@$(CP) config.h.in $(tardir)
+	@$(CP) config.sub $(tardir)
+	@$(CP) Doxyfile $(tardir)
+	@$(CP) install-sh $(tardir)
+	@$(CP) ltmain.sh $(tardir)
+	@$(CP) $(pkgcfgfile).in $(tardir)
+	@$(MKDIR) $(distdir)
+	@$(TAR) -czf $(distdir)/$(tarfile) $(tardir)
+	@$(RM) -r $(tardir)
