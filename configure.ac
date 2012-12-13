@@ -113,7 +113,7 @@ AC_CHECK_LIB([boost_filesystem], [exit], , [error_no_boost_filesystem])
 
 # Finish
 AC_CONFIG_FILES(MY_TARNAME-MY_MAJOR_VERSION.pc [Makefile])
-PKG_CHECK_MODULES([DEPS], libglfw cppunit gloop-0)
+PKG_CHECK_MODULES([DEPS], libglfw cppunit gloop-0 m3d-0)
 AC_OUTPUT
 
 # Report
