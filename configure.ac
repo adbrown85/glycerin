@@ -65,9 +65,21 @@ error_no_cppunit() {
 AC_MSG_CHECKING([for CppUnit])
 PKG_CHECK_EXISTS([cppunit], [AC_MSG_RESULT([yes])], [error_no_cppunit])
 
+# Check for Gloop
+error_no_gloop() {
+    AC_MSG_RESULT([no])
+    echo "------------------------------------------------------------"
+    echo " Gloop is needed to build MY_NAME."
+    echo " Please visit 'http://github.com/adbrown85/gloop'"
+    echo "------------------------------------------------------------"
+    (exit 1); exit 1;
+}
+AC_MSG_CHECKING([for Gloop])
+PKG_CHECK_EXISTS([gloop-0], [AC_MSG_RESULT([yes])], [error_no_gloop])
+
 # Finish
 AC_CONFIG_FILES(MY_TARNAME-MY_MAJOR_VERSION.pc [Makefile])
-PKG_CHECK_MODULES([DEPS], libglfw cppunit)
+PKG_CHECK_MODULES([DEPS], libglfw cppunit gloop-0)
 AC_OUTPUT
 
 # Report
