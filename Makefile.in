@@ -153,7 +153,7 @@ $(builddir)/%.d: %.hxx
 	@echo "  GEN   $@"
 	@$(INSTALL) -d $(builddir)
 	@$(CXX) \
-            $(CXXOPTS) \
+            -I$(srcdir) \
             -MM \
             -MP \
             $(subst .hxx,.cxx,$<) \
@@ -164,7 +164,7 @@ $(builddir)/%Test.d: %Test.cxx
 	@echo "  GEN   $@"
 	@$(INSTALL) -d $(builddir)
 	@$(CXX) \
-            $(CXXOPTS) \
+            -I$(srcdir) \
             -MM \
             -MP \
             $< \
