@@ -18,13 +18,11 @@
 #include "config.h"
 #include <cassert>
 #include <stdexcept>
-#include <boost/filesystem.hpp>
 #include <cppunit/extensions/HelperMacros.h>
 #include <GL/glfw.h>
 #include "glycerin/ShaderFactory.hxx"
 using namespace std;
 using namespace Glycerin;
-namespace bfs = boost::filesystem;
 
 
 /**
@@ -69,7 +67,12 @@ public:
 int main(int argc, char* argv[]) {
 
     // Capture the initial working directory before GLFW changes it
-    bfs::path dir = bfs::initial_path();
+#ifdef __APPLE__
+    char* const cwd = new char[PATH_MAX];
+    if (!getcwd(cwd, PATH_MAX)) {
+        throw runtime_error("Could not get current working directory!");
+    }
+#endif
 
     // Initialize GLFW
     if (!glfwInit()) {
@@ -78,7 +81,10 @@ int main(int argc, char* argv[]) {
     }
 
     // Reset current directory
-    bfs::current_path(dir);
+#ifdef __APPLE__
+    chdir(cwd);
+    delete[] cwd;
+#endif
 
     // Open a window
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
