@@ -61,10 +61,11 @@ Gloop::Shader ShaderFactory::createShaderFromStream(const GLenum type, istream& 
 
     // Make a string from the stream
     stringstream ss;
+    string line;
+    getline(stream, line);
     while (stream) {
-        string line;
-        getline(stream, line);
         ss << line << '\n';
+        getline(stream, line);
     }
 
     // Make the shader from the string
