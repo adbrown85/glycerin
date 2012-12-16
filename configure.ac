@@ -81,13 +81,13 @@ PKG_CHECK_EXISTS([gloop-0], [AC_MSG_RESULT([yes])], [error_no_gloop])
 error_no_m3d() {
     AC_MSG_RESULT([no])
     echo "------------------------------------------------------------"
-    echo " M3d is needed to build MY_NAME."
+    echo " M3d version 0.1.1 or greater is needed to build MY_NAME."
     echo " Please visit 'http://github.com/adbrown85/m3d'"
     echo "------------------------------------------------------------"
     (exit 1); exit 1;
 }
 AC_MSG_CHECKING([for M3d])
-PKG_CHECK_EXISTS([m3d-0], [AC_MSG_RESULT([yes])], [error_no_m3d])
+PKG_CHECK_EXISTS([m3d-0 >= 0.1.1], [AC_MSG_RESULT([yes])], [error_no_m3d])
 
 # Finish
 AC_CONFIG_FILES(MY_TARNAME-MY_MAJOR_VERSION.pc [Makefile])
