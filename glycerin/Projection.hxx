@@ -29,7 +29,7 @@ class Projection {
 public:
 // Methods
     static M3d::Mat4 orthographic(int width, int height);
-    static M3d::Mat4 perspective(double fov, double asp, double n, double f);
+    static M3d::Mat4 perspective(double fovy, double aspect, double zNear, double zFar);
 private:
 // Methods
     Projection();
