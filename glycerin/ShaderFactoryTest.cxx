@@ -32,6 +32,32 @@ class ShaderFactoryTest {
 public:
 
     /**
+     * Ensures createShaderFromFile works correctly with a solid fragment shader.
+     */
+    void testCreateShaderFromFileWithSolidFragmentShader() {
+        ShaderFactory sf;
+        const Gloop::Shader shader = sf.createShaderFromFile(GL_FRAGMENT_SHADER, "glycerin/solid.frag");
+        CPPUNIT_ASSERT(shader.id() != 0);
+        CPPUNIT_ASSERT(shader.compiled());
+        CPPUNIT_ASSERT_EQUAL(string(
+                "#version 140\n"
+                "\n"
+                "// Uniforms\n"
+                "uniform vec4 Color = vec4(1.0);\n"
+                "\n"
+                "// Outputs\n"
+                "out vec4 FragColor;\n"
+                "\n"
+                "/*\n"
+                " * Colors the fragment a solid color.\n"
+                " */\n"
+                "void main() {\n"
+                "    FragColor = Color;\n"
+                "}\n"),
+                shader.source());
+    }
+
+    /**
      * Ensures createShaderFromString works correctly with a vertex shader.
      */
     void testCreateShaderFromStringWithVertexShader() {
@@ -95,6 +121,7 @@ int main(int argc, char* argv[]) {
     // Run the test
     ShaderFactoryTest test;
     try {
+        test.testCreateShaderFromFileWithSolidFragmentShader();
         test.testCreateShaderFromStringWithVertexShader();
         test.testCreateShaderFromStringWithFragmentShader();
     } catch (exception& e) {
