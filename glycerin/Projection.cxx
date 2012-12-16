@@ -25,10 +25,10 @@ namespace Glycerin {
 /**
  * Calculates an orthographic projection matrix.
  *
- * 2/w 0   0  -1
- * 0   2/h 0  -1
- * 0   0  -1   0
- * 0   0   0   1
+ *     2/w 0    0  -1
+ *     0   2/h  0  -1
+ *     0   0   -1   0
+ *     0   0    0   1
  *
  * @param width Width of viewport
  * @param height Height of viewport
