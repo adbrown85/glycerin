@@ -1,0 +1,5 @@
+0.1
+ - Added BufferLayout for keeping track of what's in a buffer object
+ - Added Bitmap and BitmapReader for reading bitmap images
+ - Added ShaderFactory for creating shaders from files, streams, and strings
+ - Added Projection for calculating projection matrices
