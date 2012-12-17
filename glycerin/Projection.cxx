@@ -54,6 +54,15 @@ M3d::Mat4 Projection::orthographic(const int width, const int height) {
 /**
  * Calculates a perspective projection matrix.
  *
+ *     f = cotangent(fovy / 2)
+ *
+ *     f / a  0    0        0
+ *       0    f    0        0
+ *               f + n  2 * f * n
+ *       0    0  -----  ---------
+ *               n - f    f - n
+ *       0    0   -1        0
+ *
  * @param fovy Field of view angle, in degrees, in Y direction
  * @param aspect Aspect ratio to determine field of view in X direction
  * @param zNear Distance from viewer to near clipping plane (positive)
