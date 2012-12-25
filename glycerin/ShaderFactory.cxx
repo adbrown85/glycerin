@@ -36,7 +36,7 @@ ShaderFactory::ShaderFactory() {
  * @param type Kind of shader, e.g. `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`
  * @param filename Path to the file containing shader's source code
  * @return OpenGL handle to the shader
- * @throw std::invalid_argument if filename is empty
+ * @throws std::invalid_argument if filename is empty
  */
 Gloop::Shader ShaderFactory::createShaderFromFile(const GLenum type, const string& filename) {
 
@@ -78,7 +78,7 @@ Gloop::Shader ShaderFactory::createShaderFromStream(const GLenum type, istream& 
  * @param type Kind of shader, e.g. `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`
  * @param str String containing shader's source code
  * @return OpenGL handle to the shader
- * @throw runtime_error if could not create or compile shader
+ * @throws runtime_error if could not create or compile shader
  */
 Gloop::Shader ShaderFactory::createShaderFromString(const GLenum type, const string& str) {
 
