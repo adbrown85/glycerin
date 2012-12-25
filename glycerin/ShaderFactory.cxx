@@ -36,7 +36,7 @@ ShaderFactory::ShaderFactory() {
  * @param type Kind of shader, e.g. `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`
  * @param filename Path to the file containing shader's source code
  * @return OpenGL handle to the shader
- * @throws invalid_argument if filename is empty
+ * @throws invalid_argument if type is invalid or filename is empty
  */
 Gloop::Shader ShaderFactory::createShaderFromFile(const GLenum type, const string& filename) {
 
@@ -56,6 +56,7 @@ Gloop::Shader ShaderFactory::createShaderFromFile(const GLenum type, const strin
  * @param type Kind of shader, e.g. `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`
  * @param stream Stream containing shader's source code
  * @return OpenGL handle to the shader
+ * @throws invalid_argument if type is invalid
  */
 Gloop::Shader ShaderFactory::createShaderFromStream(const GLenum type, istream& stream) {
 
@@ -78,9 +79,14 @@ Gloop::Shader ShaderFactory::createShaderFromStream(const GLenum type, istream& 
  * @param type Kind of shader, e.g. `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`
  * @param str String containing shader's source code
  * @return OpenGL handle to the shader
+ * @throws invalid_argument if type is invalid
  * @throws runtime_error if could not create or compile shader
  */
 Gloop::Shader ShaderFactory::createShaderFromString(const GLenum type, const string& str) {
+
+    if (!isShaderType(type)) {
+        throw invalid_argument("Type is not a valid shader type!");
+    }
 
     // Create the shader
     const Gloop::Shader shader = Gloop::Shader::create(type);
@@ -97,6 +103,23 @@ Gloop::Shader ShaderFactory::createShaderFromString(const GLenum type, const str
 
     // Return the shader
     return shader;
+}
+
+/**
+ * Checks if an enumeration is a valid shader type.
+ *
+ * @param enumeration Enumeration to check
+ * @return `true` if enumeration is a valid shader type
+ */
+bool ShaderFactory::isShaderType(const GLenum enumeration) {
+    switch (enumeration) {
+    case GL_FRAGMENT_SHADER:
+    case GL_GEOMETRY_SHADER:
+    case GL_VERTEX_SHADER:
+        return true;
+    default:
+        return false;
+    }
 }
 
 } /* namespace Glycerin */

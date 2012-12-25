@@ -35,6 +35,7 @@ public:
 private:
 // Methods
     ShaderFactory& operator=(const ShaderFactory&);
+    static bool isShaderType(GLenum type);
 };
 
 } /* namespace Glycerin */

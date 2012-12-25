@@ -17,6 +17,7 @@
  */
 #include "config.h"
 #include <cassert>
+#include <sstream>
 #include <stdexcept>
 #include <cppunit/extensions/HelperMacros.h>
 #include <GL/glfw.h>
@@ -30,6 +31,14 @@ using namespace Glycerin;
  */
 class ShaderFactoryTest {
 public:
+
+    /**
+     * Ensures createShaderFromFile throws an exception if passed a bad type.
+     */
+    void testCreateShaderFromFileWithBadType() {
+        ShaderFactory sf;
+        CPPUNIT_ASSERT_THROW(sf.createShaderFromFile(GL_TEXTURE_2D, "glycerin/solid.frag"), invalid_argument);
+    }
 
     /**
      * Ensures createShaderFromFile throws an exception if passed the empty string.
@@ -63,6 +72,23 @@ public:
                 "    FragColor = Color;\n"
                 "}\n"),
                 shader.source());
+    }
+
+    /**
+     * Ensures createShaderFromStream throws an exception if passed a bad type.
+     */
+    void testCreateShaderFromStreamWithBadType() {
+        stringstream stream("");
+        ShaderFactory sf;
+        CPPUNIT_ASSERT_THROW(sf.createShaderFromStream(GL_TEXTURE_2D, stream), invalid_argument);
+    }
+
+    /**
+     * Ensures createShaderFromString throws an exception if passed a bad type.
+     */
+    void testCreateShaderFromStringWithBadType() {
+        ShaderFactory sf;
+        CPPUNIT_ASSERT_THROW(sf.createShaderFromString(GL_TEXTURE_2D, ""), invalid_argument);
     }
 
     /**
@@ -129,8 +155,11 @@ int main(int argc, char* argv[]) {
     // Run the test
     ShaderFactoryTest test;
     try {
+        test.testCreateShaderFromFileWithBadType();
         test.testCreateShaderFromFileWithEmptyString();
         test.testCreateShaderFromFileWithSolidFragmentShader();
+        test.testCreateShaderFromStreamWithBadType();
+        test.testCreateShaderFromStringWithBadType();
         test.testCreateShaderFromStringWithFragmentShader();
         test.testCreateShaderFromStringWithVertexShader();
     } catch (exception& e) {
