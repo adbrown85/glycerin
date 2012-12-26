@@ -32,6 +32,14 @@ class ShaderFactoryTest {
 public:
 
     /**
+     * Ensures createShaderFromFile throws an exception if passed the empty string.
+     */
+    void testCreateShaderFromFileWithEmptyString() {
+        ShaderFactory sf;
+        CPPUNIT_ASSERT_THROW(sf.createShaderFromFile(GL_FRAGMENT_SHADER, ""), invalid_argument);
+    }
+
+    /**
      * Ensures createShaderFromFile works correctly with a solid fragment shader.
      */
     void testCreateShaderFromFileWithSolidFragmentShader() {
@@ -121,6 +129,7 @@ int main(int argc, char* argv[]) {
     // Run the test
     ShaderFactoryTest test;
     try {
+        test.testCreateShaderFromFileWithEmptyString();
         test.testCreateShaderFromFileWithSolidFragmentShader();
         test.testCreateShaderFromStringWithFragmentShader();
         test.testCreateShaderFromStringWithVertexShader();
