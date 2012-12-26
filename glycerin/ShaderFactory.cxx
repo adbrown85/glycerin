@@ -36,7 +36,7 @@ ShaderFactory::ShaderFactory() {
  * @param type Kind of shader, e.g. `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`
  * @param filename Path to the file containing shader's source code
  * @return OpenGL handle to the shader
- * @throws std::invalid_argument if filename is empty
+ * @throws invalid_argument if filename is empty
  */
 Gloop::Shader ShaderFactory::createShaderFromFile(const GLenum type, const string& filename) {
 
