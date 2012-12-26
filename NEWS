@@ -1,3 +1,6 @@
+0.1.1
+ - ShaderFactory checks for bad types and empty strings
+
 0.1
  - Added BufferLayout for keeping track of what's in a buffer object
  - Added Bitmap and BitmapReader for reading bitmap images
