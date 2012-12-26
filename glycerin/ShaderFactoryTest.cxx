@@ -58,22 +58,6 @@ public:
     }
 
     /**
-     * Ensures createShaderFromString works correctly with a vertex shader.
-     */
-    void testCreateShaderFromStringWithVertexShader() {
-        ShaderFactory sf;
-        const Gloop::Shader shader = sf.createShaderFromString(
-                GL_VERTEX_SHADER,
-                "#version 140\n"
-                "in vec4 MCVertex;\n"
-                "void main() {\n"
-                "   gl_Position = MCVertex;\n"
-                "}\n");
-        CPPUNIT_ASSERT(shader.id() != 0);
-        CPPUNIT_ASSERT(shader.compiled());
-    }
-
-    /**
      * Ensures createShaderFromString works correctly with a fragment shader.
      */
     void testCreateShaderFromStringWithFragmentShader() {
@@ -84,6 +68,22 @@ public:
                 "out vec4 FragColor;\n"
                 "void main() {\n"
                 "    FragColor = vec4(1);\n"
+                "}\n");
+        CPPUNIT_ASSERT(shader.id() != 0);
+        CPPUNIT_ASSERT(shader.compiled());
+    }
+
+    /**
+     * Ensures createShaderFromString works correctly with a vertex shader.
+     */
+    void testCreateShaderFromStringWithVertexShader() {
+        ShaderFactory sf;
+        const Gloop::Shader shader = sf.createShaderFromString(
+                GL_VERTEX_SHADER,
+                "#version 140\n"
+                "in vec4 MCVertex;\n"
+                "void main() {\n"
+                "   gl_Position = MCVertex;\n"
                 "}\n");
         CPPUNIT_ASSERT(shader.id() != 0);
         CPPUNIT_ASSERT(shader.compiled());
@@ -122,8 +122,8 @@ int main(int argc, char* argv[]) {
     ShaderFactoryTest test;
     try {
         test.testCreateShaderFromFileWithSolidFragmentShader();
-        test.testCreateShaderFromStringWithVertexShader();
         test.testCreateShaderFromStringWithFragmentShader();
+        test.testCreateShaderFromStringWithVertexShader();
     } catch (exception& e) {
         cerr << e.what() << endl;
         throw;
