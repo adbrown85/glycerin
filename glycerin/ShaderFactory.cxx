@@ -79,13 +79,15 @@ Gloop::Shader ShaderFactory::createShaderFromStream(const GLenum type, istream& 
  * @param type Kind of shader, e.g. `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`
  * @param str String containing shader's source code
  * @return OpenGL handle to the shader
- * @throws invalid_argument if type is invalid
+ * @throws invalid_argument if type is invalid or string is empty
  * @throws runtime_error if could not create or compile shader
  */
 Gloop::Shader ShaderFactory::createShaderFromString(const GLenum type, const string& str) {
 
     if (!isShaderType(type)) {
         throw invalid_argument("Type is not a valid shader type!");
+    } else if (str.empty()) {
+        throw invalid_argument("String is empty!");
     }
 
     // Create the shader

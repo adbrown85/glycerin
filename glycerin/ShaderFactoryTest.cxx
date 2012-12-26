@@ -92,6 +92,14 @@ public:
     }
 
     /**
+     * Ensures createShaderFromString throws an exception if passed an empty string.
+     */
+    void testCreateShaderFromStringWithEmptyString() {
+        ShaderFactory sf;
+        CPPUNIT_ASSERT_THROW(sf.createShaderFromString(GL_VERTEX_SHADER, ""), invalid_argument);
+    }
+
+    /**
      * Ensures createShaderFromString works correctly with a fragment shader.
      */
     void testCreateShaderFromStringWithFragmentShader() {
@@ -160,6 +168,7 @@ int main(int argc, char* argv[]) {
         test.testCreateShaderFromFileWithSolidFragmentShader();
         test.testCreateShaderFromStreamWithBadType();
         test.testCreateShaderFromStringWithBadType();
+        test.testCreateShaderFromStringWithEmptyString();
         test.testCreateShaderFromStringWithFragmentShader();
         test.testCreateShaderFromStringWithVertexShader();
     } catch (exception& e) {
