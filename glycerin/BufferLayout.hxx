@@ -41,6 +41,7 @@ public:
     const_iterator find(const std::string& name) const;
     bool interleaved() const;
     BufferLayout& operator=(const BufferLayout& layout);
+    GLsizei sizeInBytes() const;
 private:
 // Types
     typedef std::pair<const_iterator,const_iterator> const_iterator_pair;

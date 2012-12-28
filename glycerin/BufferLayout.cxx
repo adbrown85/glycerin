@@ -108,4 +108,17 @@ BufferLayout& BufferLayout::operator=(const BufferLayout& layout) {
     _regions = layout._regions;
 }
 
+/**
+ * Returns the total size of the buffer layout in bytes.
+ *
+ * @return Total size of the buffer layout in bytes
+ */
+GLsizei BufferLayout::sizeInBytes() const {
+    GLsizei size;
+    for (const_iterator it = begin(); it != end(); ++it) {
+        size += it->sizeInBytes();
+    }
+    return size;
+}
+
 } /* namespace Glycerin */
