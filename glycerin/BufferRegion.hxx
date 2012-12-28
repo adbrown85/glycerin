@@ -34,6 +34,7 @@ public:
     std::string name() const;
     bool normalized() const;
     GLsizei offset() const;
+    GLsizei sizeInBytes() const;
     GLsizei stride() const;
     GLenum type() const;
 private:
@@ -45,6 +46,8 @@ private:
     GLsizei _offset;
     GLsizei _stride;
     GLenum _type;
+// Methods
+    static GLsizei sizeOf(GLenum type);
 // Friends
     friend class BufferLayout;
     friend class BufferLayoutBuilder;

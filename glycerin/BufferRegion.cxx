@@ -57,6 +57,33 @@ GLsizei BufferRegion::offset() const {
 }
 
 /**
+ * Determines the size of a type in bytes.
+ *
+ * @param type Type to determine size of, i.e. `GL_FLOAT`, `GL_INT`, or `GL_UNSIGNED_INT`
+ * @return Number of bytes needed to store one component of the given type
+ * @throws invalid_argument if type is invalid
+ */
+GLsizei BufferRegion::sizeOf(const GLenum type) {
+    switch (type) {
+    case GL_FLOAT:
+        return sizeof(GLfloat);
+    case GL_INT:
+        return sizeof(GLint);
+    case GL_UNSIGNED_INT:
+        return sizeof(GLuint);
+    default:
+        throw invalid_argument("[BufferRegion] Type is invalid!");
+    }
+}
+
+/**
+ * Returns the total size of the region in bytes.
+ */
+GLsizei BufferRegion::sizeInBytes() const {
+    return sizeOf(_type) * _components * _count;
+}
+
+/**
  * Returns the number of bytes between consecutive vectors in the region.
  */
 GLsizei BufferRegion::stride() const {
