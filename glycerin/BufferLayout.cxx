@@ -114,7 +114,7 @@ BufferLayout& BufferLayout::operator=(const BufferLayout& layout) {
  * @return Total size of the buffer layout in bytes
  */
 GLsizei BufferLayout::sizeInBytes() const {
-    GLsizei size;
+    GLsizei size = 0;
     for (const_iterator it = begin(); it != end(); ++it) {
         size += it->sizeInBytes();
     }
