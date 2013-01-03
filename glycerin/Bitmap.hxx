@@ -19,6 +19,7 @@
 #define GLYCERIN_BITMAP_HXX
 #include "glycerin/common.h"
 #include <fstream>
+#include <gloop/TextureObject.hxx>
 namespace Glycerin {
 
 
@@ -90,6 +91,7 @@ public:
 // Methods
     Bitmap(const Bitmap& bitmap);
     virtual ~Bitmap();
+    Gloop::TextureObject createTexture(bool mipmaps = true) const;
     GLint getAlignment() const;
     GLenum getFormat() const;
     GLsizei getWidth() const;
@@ -110,6 +112,9 @@ private:
 // Methods
     Bitmap();
     static GLubyte* copyPixels(const Bitmap& bitmap);
+    static GLenum getUnpackAlignment();
+    static bool isUnpackAlignment(GLenum enumeration);
+    static void setUnpackAlignment(GLenum unpackAlignment);
 };
 
 } /* namespace Glycerin */

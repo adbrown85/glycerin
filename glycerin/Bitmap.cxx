@@ -17,7 +17,9 @@
  */
 #include "config.h"
 #include "glycerin/common.h"
+#include <cassert>
 #include <stdexcept>
+#include <gloop/TextureTarget.hxx>
 #include "glycerin/Bitmap.hxx"
 using namespace std;
 namespace Glycerin {
@@ -62,6 +64,59 @@ GLubyte* Bitmap::copyPixels(const Bitmap& bitmap) {
     GLubyte* const copy = new GLubyte[bitmap.size];
     memcpy(copy, bitmap.pixels, bitmap.size);
     return copy;
+}
+
+/**
+ * Creates a new OpenGL texture on the current texture unit from this bitmap.
+ *
+ * Rather than manually creating a texture from the bitmap, it may sometimes be more
+ * convenient to simply let the bitmap do it itself.  For that reason
+ * `createTexture` will generate a new texture, bind it to the current OpenGL
+ * texture unit, and copy the pixel data into the texture.  If `mipmaps` is `true`
+ * mipmaps will automatically be generated using `glGenerateMipmap`.  Note that this
+ * method will use `glPixelStorei` to specify the correct alignment, but will reset
+ * it to what it was originally.  After this method returns, the texture will still
+ * be bound to the texture unit.
+ *
+ * @param mipmaps Whether to automatically generate mipmaps, by default `true`
+ * @return Handle for the new OpenGL texture
+ * @throws runtime_error if texture could not be generated
+ * @see http://www.opengl.org/sdk/docs/man3/xhtml/glGenerateMipmap.xml
+ */
+Gloop::TextureObject Bitmap::createTexture(const bool mipmaps) const {
+
+    // Generate a new texture
+    const Gloop::TextureObject texture = Gloop::TextureObject::generate();
+    assert (texture.id() > 0);
+
+    // Bind texture
+    const Gloop::TextureTarget target = Gloop::TextureTarget::texture2d();
+    target.bind(texture);
+
+    // Store unpack alignment
+    const GLenum lastAlignment = getUnpackAlignment();
+
+    // Load texture data
+    setUnpackAlignment(alignment);
+    target.texImage2d(
+                0,                // level
+                GL_RGB,           // internal format
+                width,            // width
+                height,           // height
+                format,           // format
+                GL_UNSIGNED_BYTE, // type
+                pixels);          // data
+
+    // Reset unpack alignment
+    setUnpackAlignment(lastAlignment);
+
+    // Generate mipmaps
+    if (mipmaps) {
+        target.generateMipmap();
+    }
+
+    // Return texture object
+    return texture;
 }
 
 /**
@@ -121,12 +176,43 @@ GLsizei Bitmap::getSize() const {
 }
 
 /**
+ * Returns the current value of `GL_UNPACK_ALIGNMENT`.
+ *
+ * @return Current value of `GL_UNPACK_ALIGNMENT`
+ * @see http://www.opengl.org/sdk/docs/man3/xhtml/glGet.xml
+ */
+GLenum Bitmap::getUnpackAlignment() {
+    GLint value;
+    glGetIntegerv(GL_UNPACK_ALIGNMENT, &value);
+    return (GLenum) value;
+}
+
+/**
  * Returns the size of the image in the X direction.
  *
  * @return Size of the image in the X direction
  */
 GLsizei Bitmap::getWidth() const {
     return width;
+}
+
+/**
+ * Checks if an enumeration represents a valid value for `GL_UNPACK_ALIGNMENT`.
+ *
+ * @param enumeration Enumeration to check
+ * @return `true` if enumeration is a valid value for `GL_UNPACK_ALIGNMENT`
+ * @see http://www.opengl.org/sdk/docs/man3/xhtml/glPixelStore.xml
+ */
+bool Bitmap::isUnpackAlignment(const GLenum enumeration) {
+    switch (enumeration) {
+    case 1: // byte alignment
+    case 2: // rows aligned to even-numbered bytes
+    case 4: // word-alignment
+    case 8: // rows start on double-word boundaries
+        return true;
+    default:
+        return false;
+    }
 }
 
 /**
@@ -142,6 +228,16 @@ Bitmap& Bitmap::operator=(const Bitmap& bitmap) {
     this->height = bitmap.height;
     this->size = bitmap.size;
     this->alignment = bitmap.alignment;
+}
+
+/**
+ * Changes the alignment used for reading data from client memory.
+ *
+ * @param alignment Alignment used for reading data from client memory
+ */
+void Bitmap::setUnpackAlignment(const GLenum alignment) {
+    assert (isUnpackAlignment(alignment));
+    glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 }
 
 } /* namespace Glycerin */
