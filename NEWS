@@ -1,3 +1,6 @@
+0.4
+ - Added MatrixStack
+
 0.3.1
  - Pkgconfig file includes requirements
 
