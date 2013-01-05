@@ -3,6 +3,7 @@ tarname=@PACKAGE_TARNAME@
 version=@PACKAGE_VERSION@
 major=@PACKAGE_MAJOR_VERSION@
 description=@PACKAGE_DESCRIPTION@
+requirements=@PACKAGE_REQUIREMENTS@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -12,5 +13,6 @@ includedir=@includedir@
 Name: ${name}
 Description: ${description}
 Version: ${version}
+Requires: ${requirements}
 Libs: -L${libdir} -l${tarname}-${major}
 Cflags: -I${includedir}/${tarname}-${major}
