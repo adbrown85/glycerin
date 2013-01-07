@@ -18,6 +18,7 @@
 #ifndef GLYCERIN_BUFFERREGION_HXX
 #define GLYCERIN_BUFFERREGION_HXX
 #include "glycerin/common.h"
+#include <string>
 namespace Glycerin {
 
 
