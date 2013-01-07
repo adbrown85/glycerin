@@ -83,7 +83,7 @@ PKG_CHECK_EXISTS([GLOOP_REQUIREMENT], [AC_MSG_RESULT([yes])], [error_no_gloop])
 
 # Check for M3d
 define([M3D_ID], [m3d-0])
-define([M3D_VERSION], [0.1.1])
+define([M3D_VERSION], [0.2.1])
 define([M3D_REQUIREMENT], [M3D_ID >= M3D_VERSION])
 PACKAGE_REQUIREMENTS+='M3D_REQUIREMENT '
 error_no_m3d() {
