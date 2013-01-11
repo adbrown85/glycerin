@@ -169,9 +169,17 @@ $(builddir)/%Test.d: %Test.cxx
             -MP \
             $< \
             | sed 's|[[:alnum:]/]*/||g' \
-            | sed 's|\([[:alnum:]]*\)\.o|\1 build/\1.d|' \
+            | sed 's|\([[:alnum:]]*\)\.o|\1|' \
             | sed 's|\.hxx|\.lo|g' \
             > $@
+	@$(CXX) \
+            -I$(srcdir) \
+            -MM \
+            -MP \
+            $< \
+            | sed 's|[[:alnum:]/]*/||g' \
+            | sed 's|\([[:alnum:]]*\)\.o|build/\1.d|' \
+            >> $@
 ifeq (clean,$(findstring clean,$(MAKECMDGOALS)))
   # empty
 else ifeq (html,$(findstring html,$(MAKECMDGOALS)))
