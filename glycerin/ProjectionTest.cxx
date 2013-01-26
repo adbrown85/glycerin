@@ -19,7 +19,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/ui/text/TestRunner.h>
-#include <m3d/Math.hxx>
+#include <m3d/Math.h>
 #include "glycerin/Projection.hxx"
 using namespace std;
 namespace Glycerin {

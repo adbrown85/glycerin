@@ -18,7 +18,7 @@
 #ifndef GLYCERIN_PROJECTION_HXX
 #define GLYCERIN_PROJECTION_HXX
 #include "glycerin/common.h"
-#include <m3d/Mat4.hxx>
+#include <m3d/Mat4.h>
 namespace Glycerin {
 
 

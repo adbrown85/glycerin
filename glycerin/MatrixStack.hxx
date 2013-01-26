@@ -18,7 +18,7 @@
 #ifndef GLYCERIN_MATRIX_STACK_HXX
 #define GLYCERIN_MATRIX_STACK_HXX
 #include <stack>
-#include <m3d/Mat4.hxx>
+#include <m3d/Mat4.h>
 #include "glycerin/common.h"
 namespace Glycerin {
 

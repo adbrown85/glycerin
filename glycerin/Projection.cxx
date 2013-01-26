@@ -17,7 +17,7 @@
  */
 #include "config.h"
 #include <stdexcept>
-#include <m3d/Math.hxx>
+#include <m3d/Math.h>
 #include "glycerin/Projection.hxx"
 using namespace std;
 namespace Glycerin {
