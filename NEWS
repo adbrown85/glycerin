@@ -1,3 +1,6 @@
+0.5.1
+ - Depend on M3d version 0.3.0
+
 0.5
  - Added Volume and VolumeReader
  - Depend on Gloop version 0.4
