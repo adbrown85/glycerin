@@ -1,3 +1,7 @@
+0.6
+ - Added Ray, BoundingVolume, and AxisAlignedBoundingBox
+ - Added Viewport and Projection::unProject
+
 0.5.1
  - Depend on M3d version 0.3.0
 
