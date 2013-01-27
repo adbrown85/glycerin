@@ -93,4 +93,36 @@ M3d::Mat4 Projection::perspective(const double fovy,
     return mat;
 }
 
+/**
+ * Converts normalized device coordinates to object coordinates.
+ *
+ * Note that the Y direction for the normalized device coordinates should normally
+ * be reversed because OpenGL has its origin at the bottom-left corner, whereas
+ * most windowing systems treat the top-left corner as the origin.
+ *
+ * In addition, as opposed to `gluUnProject`, `unProject` expects to be given the
+ * inverse model view projection matrix directly, so that it does not have to
+ * invert the matrix every time.
+ *
+ * @param win Normalized device coordinates, with the Y direction normally reversed
+ * @param inverseModelViewProjectionMatrix Inverse model view projection matrix
+ * @param viewport Current OpenGL viewport
+ * @return Object coordinates corresponding to given device coordinates
+ * @see http://www.opengl.org/sdk/docs/man2/xhtml/gluUnProject.xml
+ */
+M3d::Vec4 Projection::unProject(const M3d::Vec3& win,
+                                const M3d::Mat4& inverseModelViewProjectionMatrix,
+                                const Viewport& viewport) {
+
+    // Compute coordinates
+    M3d::Vec4 p;
+    p.x = (2.0 * (win.x - viewport.x()) / viewport.width()) - 1.0;
+    p.y = (2.0 * (win.y - viewport.y()) / viewport.height()) - 1.0;
+    p.z = (2.0 * win.z) - 1.0;
+    p.w = 1.0;
+
+    // Transform
+    return inverseModelViewProjectionMatrix * p;
+}
+
 } /* namespace Glycerin */

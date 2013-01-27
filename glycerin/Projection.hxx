@@ -19,6 +19,9 @@
 #define GLYCERIN_PROJECTION_HXX
 #include "glycerin/common.h"
 #include <m3d/Mat4.h>
+#include <m3d/Vec3.h>
+#include <m3d/Vec4.h>
+#include "glycerin/Viewport.hxx"
 namespace Glycerin {
 
 
@@ -30,6 +33,7 @@ public:
 // Methods
     static M3d::Mat4 orthographic(int width, int height);
     static M3d::Mat4 perspective(double fovy, double aspect, double zNear, double zFar);
+    static M3d::Vec4 unProject(const M3d::Vec3&, const M3d::Mat4&, const Viewport&);
 private:
 // Methods
     Projection();

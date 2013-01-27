@@ -21,7 +21,10 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <m3d/Math.h>
 #include <m3d/Mat4.h>
+#include <m3d/Vec3.h>
+#include <m3d/Vec4.h>
 #include "glycerin/Projection.hxx"
+#include "glycerin/Viewport.hxx"
 using namespace std;
 
 
@@ -33,6 +36,9 @@ public:
 
     // Threshold for making floating-point comparisons
     static const double TOLERANCE = 1e-6;
+
+    // Threshold for floating-point comparisons that should be approximate
+    static const double LOOSE_TOLERANCE = 1e-2;
 
     /**
      * Ensures that Projection::orthographic works with 640x480 resolution.
@@ -120,9 +126,275 @@ public:
         CPPUNIT_ASSERT_DOUBLES_EQUAL(0, mat[3][3], TOLERANCE);
     }
 
+    /**
+     * Ensures `Projection::unProject` works correctly with identity matrix and back of viewport.
+     */
+    void testUnProjectWithIdentityAndBack() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp(1.0);
+        const M3d::Vec3 win(319, 479 - 239, 0.0);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with identity matrix and bottom of viewport.
+     */
+    void testUnProjectWithIdentityAndBottom() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp(1.0);
+        const M3d::Vec3 win(319, 479 - 479, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with identity matrix and center of viewport.
+     */
+    void testUnProjectWithIdentityAndCenter() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp(1.0);
+        const M3d::Vec3 win(319, 479 - 239, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with identity matrix and front of viewport.
+     */
+    void testUnProjectWithIdentityAndFront() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp(1.0);
+        const M3d::Vec3 win(319, 479 - 239, 1.0);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with identity matrix and left side of viewport.
+     */
+    void testUnProjectWithIdentityAndLeft() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp(1.0);
+        const M3d::Vec3 win(0, 479 - 239, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with identity matrix and right side of viewport.
+     */
+    void testUnProjectWithIdentityAndRight() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp(1.0);
+        const M3d::Vec3 win(639, 479 - 239, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with identity matrix and top of viewport.
+     */
+    void testUnProjectWithIdentityAndTop() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp(1.0);
+        const M3d::Vec3 win(319, 479 - 0, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with orthographic matrix and back of viewport.
+     */
+    void testUnProjectWithOrthographicAndBack() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp = M3d::inverse(Glycerin::Projection::orthographic(640, 480));
+        const M3d::Vec3 win(319, 479 - 239, 1.0);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(319.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(240.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with orthographic matrix and bottom of viewport.
+     */
+    void testUnProjectWithOrthographicAndBottom() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp = M3d::inverse(Glycerin::Projection::orthographic(640, 480));
+        const M3d::Vec3 win(319, 479 - 479, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(319.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with orthographic matrix and center of viewport.
+     */
+    void testUnProjectWithOrthographicAndCenter() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp = M3d::inverse(Glycerin::Projection::orthographic(640, 480));
+        const M3d::Vec3 win(319, 479 - 239, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(319.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(240.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with orthographic matrix and front of viewport.
+     */
+    void testUnProjectWithOrthographicAndFront() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp = M3d::inverse(Glycerin::Projection::orthographic(640, 480));
+        const M3d::Vec3 win(319, 479 - 239, 0.0);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(319.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(240.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with orthographic matrix and left side of viewport.
+     */
+    void testUnProjectWithOrthographicAndLeft() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp = M3d::inverse(Glycerin::Projection::orthographic(640, 480));
+        const M3d::Vec3 win(0, 479 - 239, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(240.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with orthographic matrix and right side of viewport.
+     */
+    void testUnProjectWithOrthographicAndRight() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp = M3d::inverse(Glycerin::Projection::orthographic(640, 480));
+        const M3d::Vec3 win(639, 479 - 239, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(639.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(240.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
+    /**
+     * Ensures `Projection::unProject` works correctly with orthographic matrix and top of viewport.
+     */
+    void testUnProjectWithOrthographicAndTop() {
+
+        // Make parameters
+        const Glycerin::Viewport viewport(0, 0, 640, 480);
+        const M3d::Mat4 imvp = M3d::inverse(Glycerin::Projection::orthographic(640, 480));
+        const M3d::Vec3 win(319, 479 - 0, 0.5);
+
+        // Check results
+        const M3d::Vec4 actual = Glycerin::Projection::unProject(win, imvp, viewport);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(319.0, actual.x, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(479.0, actual.y, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, actual.z, LOOSE_TOLERANCE);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, actual.w, LOOSE_TOLERANCE);
+    }
+
     CPPUNIT_TEST_SUITE(ProjectionTest);
     CPPUNIT_TEST(testOrthographicWithSixFortyByFourEighty);
     CPPUNIT_TEST(testPerspectiveWithThirtyDegrees);
+    CPPUNIT_TEST(testUnProjectWithIdentityAndBack);
+    CPPUNIT_TEST(testUnProjectWithIdentityAndBottom);
+    CPPUNIT_TEST(testUnProjectWithIdentityAndCenter);
+    CPPUNIT_TEST(testUnProjectWithIdentityAndFront);
+    CPPUNIT_TEST(testUnProjectWithIdentityAndLeft);
+    CPPUNIT_TEST(testUnProjectWithIdentityAndRight);
+    CPPUNIT_TEST(testUnProjectWithIdentityAndTop);
+    CPPUNIT_TEST(testUnProjectWithOrthographicAndBack);
+    CPPUNIT_TEST(testUnProjectWithOrthographicAndBottom);
+    CPPUNIT_TEST(testUnProjectWithOrthographicAndCenter);
+    CPPUNIT_TEST(testUnProjectWithOrthographicAndFront);
+    CPPUNIT_TEST(testUnProjectWithOrthographicAndLeft);
+    CPPUNIT_TEST(testUnProjectWithOrthographicAndRight);
+    CPPUNIT_TEST(testUnProjectWithOrthographicAndTop);
     CPPUNIT_TEST_SUITE_END();
 };
 
