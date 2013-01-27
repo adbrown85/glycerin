@@ -23,7 +23,7 @@ namespace Glycerin {
 
 
 /**
- * Utility for calculating projection matrices.
+ * Utility for working with projection matrices.
  */
 class Projection {
 public:
