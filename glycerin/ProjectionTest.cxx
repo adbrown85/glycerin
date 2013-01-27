@@ -20,6 +20,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <m3d/Math.h>
+#include <m3d/Mat4.h>
 #include "glycerin/Projection.hxx"
 using namespace std;
 
