@@ -122,7 +122,8 @@ M3d::Vec4 Projection::unProject(const M3d::Vec3& win,
     p.w = 1.0;
 
     // Transform
-    return inverseModelViewProjectionMatrix * p;
+    const M3d::Vec4 o = inverseModelViewProjectionMatrix * p;
+    return o / o.w;
 }
 
 } /* namespace Glycerin */
