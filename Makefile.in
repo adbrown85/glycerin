@@ -142,6 +142,9 @@ install: all
 	@$(INSTALL) -m 0644 $(pkgcfgfile) $(pkgcfgdir)
 	@echo "  INSTALL $(datadir)/$(tarname)-$(major)"
 	@$(INSTALL) -d $(datadir)/$(tarname)-$(major)
+	@$(INSTALL) -m 0644 $(srcdir)/$(tarname)/monospaced-24.bmp $(datadir)/$(tarname)-$(major)
+	@$(INSTALL) -m 0644 $(srcdir)/$(tarname)/text-renderer.vert $(datadir)/$(tarname)-$(major)
+	@$(INSTALL) -m 0644 $(srcdir)/$(tarname)/text-renderer.frag $(datadir)/$(tarname)-$(major)
 uninstall:
 	@echo "  UNINSTALL $(libdir)/$(library)"
 	@$(LIBTOOL) --mode=uninstall --quiet $(RM) $(libdir)/$(library)
