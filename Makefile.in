@@ -15,6 +15,8 @@ bindir       := @bindir@
 libdir       := @libdir@
 includedir   := @includedir@
 srcdir       := @srcdir@
+datarootdir  := @datarootdir@
+datadir      := @datadir@
 builddir     := build
 docdir       := doc
 distdir      := dist
@@ -34,7 +36,7 @@ LIBTOOL      := $(srcdir)/libtool
 CPPFLAGS     := @CPPFLAGS@
 CXXFLAGS     := @CXXFLAGS@
 INCLUDES     := -I$(srcdir)
-DEFS         := @DEFS@
+DEFS         := @DEFS@ -DDATA_DIR=\"$(datadir)\"
 DEPS_CFLAGS  := @DEPS_CFLAGS@
 CXXOPTS      := $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $(DEFS) $(DEPS_CFLAGS)
 
@@ -138,6 +140,8 @@ install: all
 	@echo "  INSTALL $(pkgcfgdir)/$(pkgcfgfile)"
 	@$(INSTALL) -d $(pkgcfgdir)
 	@$(INSTALL) -m 0644 $(pkgcfgfile) $(pkgcfgdir)
+	@echo "  INSTALL $(datadir)/$(tarname)-$(major)"
+	@$(INSTALL) -d $(datadir)/$(tarname)-$(major)
 uninstall:
 	@echo "  UNINSTALL $(libdir)/$(library)"
 	@$(LIBTOOL) --mode=uninstall --quiet $(RM) $(libdir)/$(library)
@@ -145,6 +149,8 @@ uninstall:
 	@$(RM) -r $(includedir)/$(tarname)-$(major)
 	@echo "  UNINSTALL $(pkgcfgdir)/$(pkgcfgfile)"
 	@$(RM) $(pkgcfgdir)/$(pkgcfgfile)
+	@echo "  UNINSTALL $(datadir)/$(tarname)-$(major)"
+	@$(RM) -r $(datadir)/$(tarname)-$(major)
 
 # Dependencies
 .PHONY: depends
