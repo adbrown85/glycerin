@@ -52,6 +52,12 @@ error_no_glfw() {
 AC_MSG_CHECKING([for GLFW])
 PKG_CHECK_EXISTS([libglfw], [AC_MSG_RESULT([yes])], [error_no_glfw])
 AC_DEFINE([GL_DO_NOT_WARN_IF_MULTI_GL_VERSION_HEADERS_INCLUDED], [1], [Required for GLFW])
+AC_DEFINE([PACKAGE_MAJOR_VERSION], MY_MAJOR_VERSION, [Major version of package])
+AC_DEFINE([PACKAGE_MAJOR_VERSION_AS_STRING], "MY_MAJOR_VERSION", [Major version of package])
+AC_DEFINE([PACKAGE_MINOR_VERSION], MY_MINOR_VERSION, [Minor version of package])
+AC_DEFINE([PACKAGE_MINOR_VERSION_AS_STRING], "MY_MINOR_VERSION", [Minor version of package])
+AC_DEFINE([PACKAGE_INCREMENTAL_VERSION], MY_INCREMENTAL_VERSION, [Incremental version of package])
+AC_DEFINE([PACKAGE_INCREMENTAL_VERSION_AS_STRING], "MY_INCREMENTAL_VERSION", [Incremental version of package])
 
 # Check for CppUnit
 error_no_cppunit() {
