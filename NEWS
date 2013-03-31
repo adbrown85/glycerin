@@ -1,3 +1,6 @@
+0.8
+ - Added text renderer utility
+
 0.7.1
  - Depend on Gloop version 0.7
 
