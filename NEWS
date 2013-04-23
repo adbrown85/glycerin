@@ -1,3 +1,7 @@
+0.8.2
+ - Don't redeclare GL3_PROTOTYPES and GL_GLEXT_PROTOTYPES
+ - Ensure GL3_PROTOTYPES and GL_GLEXT_PROTOTYPES declared in config.h
+
 0.8.1
  - Fixed wrong case of includes in some tests
  - Fixed VolumeReader not finding 'INT_MAX' on Linux
