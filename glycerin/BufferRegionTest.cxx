@@ -19,9 +19,9 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/ui/text/TestRunner.h>
-#include "Glycerin/BufferLayout.hxx"
-#include "Glycerin/BufferLayoutBuilder.hxx"
-#include "Glycerin/BufferRegion.hxx"
+#include "glycerin/BufferLayout.hxx"
+#include "glycerin/BufferLayoutBuilder.hxx"
+#include "glycerin/BufferRegion.hxx"
 using Glycerin::BufferLayout;
 using Glycerin::BufferLayoutBuilder;
 using Glycerin::BufferRegion;

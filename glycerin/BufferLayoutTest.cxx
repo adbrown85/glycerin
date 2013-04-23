@@ -2,8 +2,8 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/ui/text/TestRunner.h>
-#include "Glycerin/BufferLayout.hxx"
-#include "Glycerin/BufferLayoutBuilder.hxx"
+#include "glycerin/BufferLayout.hxx"
+#include "glycerin/BufferLayoutBuilder.hxx"
 using Glycerin::BufferLayout;
 using Glycerin::BufferLayoutBuilder;
 
