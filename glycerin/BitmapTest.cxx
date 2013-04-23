@@ -144,7 +144,7 @@ public:
         vao.bind();
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glfwSwapBuffers();
-        sleep(SLEEP_TIME_IN_SECONDS);
+        glfwSleep(SLEEP_TIME_IN_SECONDS);
     }
 };
 
