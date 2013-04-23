@@ -73,7 +73,7 @@ PKG_CHECK_EXISTS([cppunit], [AC_MSG_RESULT([yes])], [error_no_cppunit])
 
 # Check for Gloop
 define([GLOOP_ID], [gloop-0])
-define([GLOOP_VERSION], [0.7.0])
+define([GLOOP_VERSION], [0.7.2])
 define([GLOOP_REQUIREMENT], [GLOOP_ID >= GLOOP_VERSION])
 PACKAGE_REQUIREMENTS+='GLOOP_REQUIREMENT '
 error_no_gloop() {
