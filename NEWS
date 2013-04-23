@@ -1,3 +1,9 @@
+0.8.1
+ - Fixed wrong case of includes in some tests
+ - Fixed VolumeReader not finding 'INT_MAX' on Linux
+ - Fixed not finding reference to 'sleep' on Linux
+ - Fixed undefined references to OpenGL functions on Linux
+
 0.8
  - Added text renderer utility
 
