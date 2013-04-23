@@ -103,6 +103,13 @@ error_no_m3d() {
 AC_MSG_CHECKING([for M3d])
 PKG_CHECK_EXISTS([M3D_REQUIREMENT], [AC_MSG_RESULT([yes])], [error_no_m3d])
 
+# Define flags needed for OpenGL 3
+if test "$host_vendor" = 'apple'; then
+    AC_DEFINE([GL3_PROTOTYPES], [1], [Required for using OpenGL 3 on Mac])
+else
+    AC_DEFINE([GL_GLEXT_PROTOTYPES], [1], [Required for using OpenGL 3 on Linux])
+fi
+
 # Finish
 AC_CONFIG_FILES(MY_TARNAME-MY_MAJOR_VERSION.pc [Makefile])
 PKG_CHECK_MODULES([DEPS], libglfw cppunit GLOOP_ID M3D_ID)
